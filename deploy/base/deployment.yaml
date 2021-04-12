@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-kube
+spec:
+  selector:
+    matchLabels:
+      app: go-kube
+  template:
+    metadata:
+      name: go-kube
+      labels:
+        app: go-kube
+    spec:
+      containers:
+        - name: go-kube
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent

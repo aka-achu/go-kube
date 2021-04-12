@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: go-kube-staging
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-kube
+  namespace: go-kube-staging
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: go-kube
+  sessionAffinity: ClientIP
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    keel.sh/policy: glob:dev-*
+  name: go-kube
+  namespace: go-kube-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-kube
+  template:
+    metadata:
+      labels:
+        app: go-kube
+      name: go-kube
+    spec:
+      containers:
+      - image: runq/go-kube:dev-0ca740e
+        imagePullPolicy: IfNotPresent
+        name: go-kube
+        ports:
+        - containerPort: 8080
+          protocol: TCP
