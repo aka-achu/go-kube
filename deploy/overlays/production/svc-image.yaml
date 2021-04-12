@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-kube
+spec:
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-kube
+  annotations:
+    keel.sh/policy: all
+spec:
+  replicas: 5
+  template:
+    spec:
+      containers:
+        - name: go-kube
+          image: runq/go-kube:0.1.0
